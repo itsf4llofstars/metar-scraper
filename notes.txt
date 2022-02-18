@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+"""main.py file to scrape the weather dat in the form of a raw
+METAR"""
+import os
+import re
+import sys
+from bs4 import BeautifulSoup as bs
+
+os.system("clear")
+
+icao = "kstl"
+
+AWC_SITE = "https://www.aviationweather.gov/metar"
+AWC_METAR = f"https://www.aviationweather.gov/metar/data?ids={icao}&format=raw&date=&hours=0"
+
