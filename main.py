@@ -19,7 +19,7 @@ AWC_FILE = None
 
 try:
     with open(f"/home/pi/python/metar-scraper/{ICAO}-metar.txt", 'w') as w:
-        awc_file = w.write(awc_string)
+        AWC_FILE = w.write(AWC_STRING)
 except FileNotFoundError as fnfe:
     print(f"{fnfe}")
 

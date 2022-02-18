@@ -1,5 +1,6 @@
 # My additions
-*metar*.txt
+*.txt
+!notes.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
