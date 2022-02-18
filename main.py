@@ -27,3 +27,18 @@ except FileNotFoundError as fnfe:
 except Exception as err:
     print(f"{err}")
 
+hourly_metar = None
+try:
+    with open(f"/home/pi/python/metar-scraper/{icao}-metar.txt", 'r') as r:
+        html_text = r.readlines()
+except FileNotFoundError as fnfe:
+    print(f"{fnfe}")
+except Exception as err:
+    print(f"{err}")
+else:
+    for line in html_text:
+        if (icao.upper() in line) and line.startswith("<code>"):
+            hourly_metar = line[6:-13]
+            break
+
+print(hourly_metar)
