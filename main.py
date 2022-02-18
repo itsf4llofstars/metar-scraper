@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup as bs
 
 os.system("clear")
 
-icao = 'kaln'
+icao = "kord"
 AWC_METAR = f"https://www.aviationweather.gov/metar/data?ids={icao}&format=raw&date=&hours=0"
 
 awc_page = requests.get(AWC_METAR)
@@ -43,13 +43,12 @@ else:
 
 os.unlink(f"{icao}-metar.txt")
 
+metar_file_name = "metars.txt"
 try:
-    with open(f"/home/pi/python/metar-scraper/{icao}-hourly.txt", "a") as append:
+    with open(f"/home/pi/python/metar-scraper/{metar_file_name}", "a") as append:
         append.write(hourly_metar)
         append.write("\n")
 except FileNotFoundError as fnfe:
     print(f"{fnfe}")
 except Exception as err:
     print(f"{err}")
-
-print(hourly_metar)
