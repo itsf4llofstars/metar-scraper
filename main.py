@@ -41,4 +41,15 @@ else:
             hourly_metar = line[6:-13]
             break
 
+os.unlink(f"{icao}-metar.txt")
+
+try:
+    with open(f"/home/pi/python/metar-scraper/{icao}-hourly.txt", "a") as append:
+        append.write(hourly_metar)
+        append.write("\n")
+except FileNotFoundError as fnfe:
+    print(f"{fnfe}")
+except Exception as err:
+    print(f"{err}")
+
 print(hourly_metar)
