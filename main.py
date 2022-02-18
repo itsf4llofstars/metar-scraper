@@ -4,51 +4,43 @@ main.py file to scrape the weather data in the form of a raw
 METAR
 """
 import os
-import re
 import requests
-import sys
 from bs4 import BeautifulSoup as bs
 
 os.system("clear")
 
-icao = "kord"
-AWC_METAR = f"https://www.aviationweather.gov/metar/data?ids={icao}&format=raw&date=&hours=0"
+ICAO = "kord"
+AWC_METAR = f"https://www.aviationweather.gov/metar/data?ids={ICAO}&format=raw&date=&hours=0"
 
-awc_page = requests.get(AWC_METAR)
-awc_html = bs(awc_page.content, features="html.parser")
-awc_string = str(awc_html)
-awc_file = None
+AWC_PAGE = requests.get(AWC_METAR)
+AWC_HTML = bs(AWC_PAGE.content, features="html.parser")
+AWC_STRING = str(AWC_HTML)
+AWC_FILE = None
 
 try:
-    with open(f"/home/pi/python/metar-scraper/{icao}-metar.txt", 'w') as w:
+    with open(f"/home/pi/python/metar-scraper/{ICAO}-metar.txt", 'w') as w:
         awc_file = w.write(awc_string)
 except FileNotFoundError as fnfe:
     print(f"{fnfe}")
-except Exception as err:
-    print(f"{err}")
 
-hourly_metar = None
+HOURLY_METAR = None
 try:
-    with open(f"/home/pi/python/metar-scraper/{icao}-metar.txt", 'r') as r:
+    with open(f"/home/pi/python/metar-scraper/{ICAO}-metar.txt", 'r') as r:
         html_text = r.readlines()
 except FileNotFoundError as fnfe:
     print(f"{fnfe}")
-except Exception as err:
-    print(f"{err}")
 else:
     for line in html_text:
-        if (icao.upper() in line) and line.startswith("<code>"):
-            hourly_metar = line[6:-13]
+        if (ICAO.upper() in line) and line.startswith("<code>"):
+            HOURLY_METAR = line[6:-13]
             break
 
-os.unlink(f"{icao}-metar.txt")
+os.unlink(f"{ICAO}-metar.txt")
 
-metar_file_name = "metars.txt"
+METAR_FILE_NAME = "metars.txt"
 try:
-    with open(f"/home/pi/python/metar-scraper/{metar_file_name}", "a") as append:
-        append.write(hourly_metar)
+    with open(f"/home/pi/python/metar-scraper/{METAR_FILE_NAME}", "a") as append:
+        append.write(HOURLY_METAR)
         append.write("\n")
 except FileNotFoundError as fnfe:
     print(f"{fnfe}")
-except Exception as err:
-    print(f"{err}")
