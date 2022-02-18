@@ -4,3 +4,19 @@ Notes for scraping METAR's
 AWC_SITE = "https://www.aviationweather.gov/metar"
 AWC_METAR = f"https://www.aviationweather.gov/metar/data?ids={icao}&format=raw&date=&hours=0"
 
+
+hourly_metar = None
+try:
+    with open(f"/home/pi/python/metar-scraper/{icao}-metar.txt", 'r') as r:
+        html_text = r.readlines()
+except FileNotFoundError as fnfe:
+    print(f"{fnfe}")
+except Exception as err:
+    print(f"{err}")
+else:
+    for line in html_text:
+        if line.startswith("<code>"):
+            hourly_metar = line[6:-12]
+            break
+
+print(hourly_metar)
