@@ -4,8 +4,8 @@ hourly basis. Used as a cron script.
 """
 import requests
 import time
+import re
 from bs4 import BeautifulSoup as bs
-
 
 
 def main():
@@ -28,15 +28,17 @@ def main():
     KSTL_HTML = bs(KSTL_PAGE.content, features="html.parser")
 
     # set constant variables for parsing and writing
-    KALN_STR = str(KALN_HTML)
-    KALN_FILE = None
-    KALN_HR_METAR = None
     KALN_FILE = "kaln-metar.txt"
-
-    KSTL_STR = str(KSTL_HTML)
-    KSTL_FILE = None
-    KSTL_HR_METAR = None
     KSTL_FILE = "kaln-metar.txt"
+
+    kaln_metar = KALN_HTML.find_all("code", string=re.compile(r"KALN"))[0]
+    kstl_metar = KSTL_HTML.find_all("code", string=re.compile(r"KSTL"))[0]
+
+    kaln_metar_str = str(kaln_metar)[6:-7]
+    kstl_metar_str = str(kstl_metar)[6:-7]
+
+    print(kaln_metar_str)
+    print(kstl_metar_str)
 
 
 if __name__ == "__main__":
