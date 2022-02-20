@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """cron-metar.py Script to check, scrape and write METAR data on an
 hourly basis. Used as a cron script.
+Released as ver. 1.1
 """
 import re
 import time
