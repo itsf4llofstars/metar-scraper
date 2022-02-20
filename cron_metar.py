@@ -8,11 +8,21 @@ import re
 from bs4 import BeautifulSoup as bs
 
 
+def write_metar(file_name, metar) -> None:
+    """Writes the METAR to a file"""
+    try:
+        with open(f"/home/pi/Documents/{file_name}", "a") as append:
+            append.write(metar)
+            append.write("\n")
+    except OSError as os:
+        print(f"{os}")
+
+
 def main():
     """main function"""
     # icao id's for airports
-    KALN = "KALN"
-    KSTL = "KSTL"
+    KALN = "kaln"
+    KSTL = "kstl"
 
     # Web address to scrape
     AWC_METAR_KALN = f"https://www.aviationweather.gov/metar/data?ids={KALN}&format=raw&date=&hours=0"
@@ -29,16 +39,19 @@ def main():
 
     # set constant variables for parsing and writing
     KALN_FILE = "kaln-metar.txt"
-    KSTL_FILE = "kaln-metar.txt"
+    KSTL_FILE = "kstl-metar.txt"
 
+    # find the stations icao in the code tag
     kaln_metar = KALN_HTML.find_all("code", string=re.compile(r"KALN"))[0]
     kstl_metar = KSTL_HTML.find_all("code", string=re.compile(r"KSTL"))[0]
 
+    # create string from the regex returned tag line
     kaln_metar_str = str(kaln_metar)[6:-7]
     kstl_metar_str = str(kstl_metar)[6:-7]
 
-    print(kaln_metar_str)
-    print(kstl_metar_str)
+    # append METAR wx to file
+    write_metar(KALN_FILE, kaln_metar_str)
+    write_metar(KSTL_FILE, kstl_metar_str)
 
 
 if __name__ == "__main__":
