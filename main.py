@@ -27,14 +27,14 @@ METAR_FILE_NAME = "metars.txt"
 
 # Writes scraped html to text file
 try:
-    with open(f"/home/pi/python/metar-scraper/{ICAO}-metar.txt", 'w', encoding=utf_8) as w:
+    with open(f"/home/$USER/python/metar-scraper/{ICAO}-metar.txt", 'w', encoding=utf_8) as w:
         AWC_FILE = w.write(AWC_STRING)
 except FileNotFoundError as fnfe:
     print(f"{fnfe}")
 
 # Reads in html scraped text and parses out the metar text line
 try:
-    with open(f"/home/pi/python/metar-scraper/{ICAO}-metar.txt", 'r', encoding=utf_8) as r:
+    with open(f"/home/$USER/python/metar-scraper/{ICAO}-metar.txt", 'r', encoding=utf_8) as r:
         html_text = r.readlines()
 except FileNotFoundError as fnfe:
     print(f"{fnfe}")
@@ -49,7 +49,7 @@ os.unlink(f"{ICAO}-metar.txt")
 
 # Appends the raw METAR text to text file
 try:
-    with open(f"/home/pi/python/metar-scraper/{METAR_FILE_NAME}", "a", encoding=utf_8) as append:
+    with open(f"/home/$USER/python/metar-scraper/{METAR_FILE_NAME}", "a", encoding=utf_8) as append:
         append.write(HOURLY_METAR)
         append.write("\n")
 except FileNotFoundError as fnfe:

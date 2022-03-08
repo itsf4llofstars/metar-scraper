@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup as bs
 def write_metar(file_name, metar) -> None:
     """Writes the METAR to a file"""
     try:
-        with open(f"/home/pi/Documents/{file_name}", "a") as append:
+        with open(f"/home/$USER/Documents/{file_name}", "a") as append:
             append.write(metar)
             append.write("\n")
     except OSError as os_err:
