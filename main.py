@@ -66,7 +66,6 @@ def write_metar(metar_text, filename) -> None:
         append.write(metar_text + "\n")
 
 
-metar_list = []
 index = 0
 while index < len(ICAO):
     AWC_METAR_SITE = f"https://www.aviationweather.gov/metar/data?ids={ICAO[index]}&format=raw&date=&hours=0"
