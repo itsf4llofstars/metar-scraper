@@ -16,48 +16,51 @@ METAR_FILES = ["kstl.txt", "kaln.txt"]
 PATH = "/home/pi/metars/"
 
 
-def request_website(website):
-    """_summary_
+def request_website(website) -> object:
+    """Requests and get the html text from the passed website
 
     Args:
-        website (_type_): _description_
+        website (str): Address to the requested website
 
     Returns:
-        _type_: _description_
+        obj: Request object html text
     """
     return requests.get(website)
 
 
-def get_soup(html_text):
-    """_summary_
+def get_soup(html_text) -> object:
+    """Gets and return the Beautiful Soup text data from the passed
+    html text data.
 
     Args:
-        html_text (_type_): _description_
+        html_text (obj): html text data
 
     Returns:
-        _type_: _description_
+        obj: Beautiful Soup html parsed object
     """
     return bs(html_text.content, features="html.parser")
 
 
-def get_tag(html_text):
-    """_summary_
+def get_tag(html_text) -> object:
+    """Parses and return the text line in the html text with the code
+    tag
 
     Args:
-        html_text (_type_): _description_
+        html_text (obj): Beautiful Soup html object
 
     Returns:
-        _type_: _description_
+        obj: Beautiful Soup object of one line with the code html tag
     """
     return html_text.code
 
 
-def write_metar(metar_text, filename):
-    """_summary_
+def write_metar(metar_text, filename) -> None:
+    """Writes the sinle line raw (non-decoded) METAR data to the text file
 
     Args:
-        metar_text (_type_): _description_
-        filename (_type_): _description_
+        metar_text (str): Un-decoded METAR text
+        filename (str): Filename to write the METAR text to
+        PATH (str): Path to the directory to write the text file to
     """
     with open(PATH + filename, "a", encoding="utf-8") as append:
         append.write(metar_text + "\n")
@@ -78,6 +81,7 @@ while index < len(ICAO):
     ## Sets the metars variable to the raw metar text
     metars = code_tag.children
 
-    [write_metar(metar, METAR_FILES[index]) for metar in metars]
+    for metar in metars:
+        write_metar(metar, METAR_FILES[index])
 
     index += 1
