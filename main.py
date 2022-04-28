@@ -2,21 +2,26 @@
 """
 main.py file to scrape the weather data in the form of a raw
 METAR
-You will need to replace "$USER" with your own linux user account name
 """
 from encodings import utf_8
-import os
 import requests
 from bs4 import BeautifulSoup as bs
 
-# os.system("clear")
 
-# Address and ID for scraping
-ICAO = "kstl"
+## Airports list
+ICAO = ["kstl", "kaln"]
+
+## METAR txt file names list
+METAR_FILES = ["kstl.txt", "kaln.txt"]
+
+
+## Web address to be scraped
 AWC_METAR_LINK = f"https://www.aviationweather.gov/metar/data?ids={ICAO}&format=raw&date=&hours=0"
 
-# Requests web site data and scrapes html
+## Requests web site data
 AWC_PAGE = requests.get(AWC_METAR_LINK)
+
+## Beautiful Soup scraping of the web-site data
 AWC_HTML = bs(AWC_PAGE.content, features="html.parser")
 
 # Setup constant variables for scraping, parssing, and writing text
