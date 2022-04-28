@@ -7,28 +7,30 @@ from encodings import utf_8
 import requests
 from bs4 import BeautifulSoup as bs
 
-
 ## Airports list
 ICAO = ["kstl", "kaln"]
 
 ## METAR txt file names list
 METAR_FILES = ["kstl.txt", "kaln.txt"]
 
+## Path to text metar text files
+PATH = "/home/pi/metars/"
+
 index = 0
 while index < len(ICAO):
-## Web address to be scraped
+    ## Web address to be scraped
     AWC_METAR_LINK = f"https://www.aviationweather.gov/metar/data?ids={ICAO[index]}&format=raw&date=&hours=0"
 
-## Requests web site data
-    AWC_PAGE = requests.get(AWC_METAR_LINK)
+    ## Requests web site data
+    awc_page = requests.get(AWC_METAR_LINK)
 
-## Beautiful Soup scraping of the web-site data
-    AWC_HTML = bs(AWC_PAGE.content, features="html.parser")
+    ## Beautiful Soup scraping of the web-site data
+    awc_html = bs(AWC_PAGE.content, features="html.parser")
 
-## Sets variable to the line that has the METAR text data
-    CODE_TAG = AWC_HTML.code
+    ## Sets variable to the line that has the METAR text data
+    code_tag = AWC_HTML.code
 
-## Print debug
+    ## Print debug
     for metar in CODE_TAG.children:
         print(metar)
 
