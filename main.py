@@ -3,54 +3,81 @@
 main.py file to scrape the weather data in the form of a raw
 METAR
 """
-from encodings import utf_8
-import os
 import requests
 from bs4 import BeautifulSoup as bs
 
-# os.system("clear")
+## Airports list
+ICAO = ["kstl", "kaln"]
 
-# Address and ID for scraping
-ICAO = "kstl"
-AWC_METAR_LINK = f"https://www.aviationweather.gov/metar/data?ids={ICAO}&format=raw&date=&hours=0"
+## METAR txt file names list
+METAR_FILES = ["kstl.txt", "kaln.txt"]
 
-# Requests web site data and scrapes html
-AWC_PAGE = requests.get(AWC_METAR_LINK)
-AWC_HTML = bs(AWC_PAGE.content, features="html.parser")
-
-# Setup constant variables for scraping, parssing, and writing text
-AWC_STRING = str(AWC_HTML)
-AWC_FILE = None
-HOURLY_METAR = None
-METAR_FILE_NAME = "metars.txt"
+## Path to write the metar text to
+PATH = "/home/pi/metars/"
 
 
-# Writes scraped html to text file
-try:
-    with open(f"/home/pi/python/metar-scraper/{ICAO}-metar.txt", 'w') as w:
-        AWC_FILE = w.write(AWC_STRING)
-except FileNotFoundError as fnfe:
-    print(f"{fnfe}")
+def request_website(website) -> object:
+    """Requests and get the html text from the passed website
 
-# Reads in html scraped text and parses out the metar text line
-try:
-    with open(f"/home/pi/python/metar-scraper/{ICAO}-metar.txt", 'r') as r:
-        html_text = r.readlines()
-except FileNotFoundError as fnfe:
-    print(f"{fnfe}")
-else:
-    for line in html_text:
-        if (ICAO.upper() in line) and line.startswith("<code>"):
-            HOURLY_METAR = line[6:-13]
-            break
+    Args:
+        website (str): Address to the requested website
 
-# Deletes unused text file
-os.unlink(f"/home/pi/python/metar-scraper/{ICAO}-metar.txt")
+    Returns:
+        obj: Request object html text
+    """
+    return requests.get(website)
 
-# Appends the raw METAR text to text file
-try:
-    with open(f"/home/pi/python/metar-scraper/{METAR_FILE_NAME}", "a") as append:
-        append.write(HOURLY_METAR)
-        append.write("\n")
-except FileNotFoundError as fnfe:
-    print(f"{fnfe}")
+
+def get_soup(html_text) -> object:
+    """Gets and return the Beautiful Soup text data from the passed
+    html text data.
+
+    Args:
+        html_text (obj): html text data
+
+    Returns:
+        obj: Beautiful Soup html parsed object
+    """
+    return bs(html_text.content, features="html.parser")
+
+
+def get_tag(html_text) -> object:
+    """Parses and return the text line in the html text with the code
+    tag
+
+    Args:
+        html_text (obj): Beautiful Soup html object
+
+    Returns:
+        obj: Beautiful Soup object of one line with the code html tag
+    """
+    return html_text.code
+
+
+def write_metar(metar_text, filename) -> None:
+    """Writes the sinle line raw (non-decoded) METAR data to the text file
+
+    Args:
+        metar_text (str): Un-decoded METAR text
+        filename (str): Filename to write the METAR text to
+        PATH (str): Path to the directory to write the text file to
+    """
+    with open(PATH + filename, "a", encoding="utf-8") as append:
+        append.write(metar_text + "\n")
+
+
+index = 0
+while index < len(ICAO):
+    AWC_METAR_SITE = f"https://www.aviationweather.gov/metar/data?ids={ICAO[index]}&format=raw&date=&hours=0"
+
+    awc_page = request_website(AWC_METAR_SITE)
+    awc_html = get_soup(awc_page)
+    code_tag = get_tag(awc_html)
+
+    ## Sets the metars variable to the metar text between the code tag
+    metars = code_tag.children
+
+    for metar in metars:
+        write_metar(metar, METAR_FILES[index])
+
+    index += 1
