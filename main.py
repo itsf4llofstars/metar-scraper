@@ -69,16 +69,13 @@ def write_metar(metar_text, filename) -> None:
 metar_list = []
 index = 0
 while index < len(ICAO):
-    ## Web address to be scraped
     AWC_METAR_SITE = f"https://www.aviationweather.gov/metar/data?ids={ICAO[index]}&format=raw&date=&hours=0"
 
     awc_page = request_website(AWC_METAR_SITE)
     awc_html = get_soup(awc_page)
-
-    ## Sets code_tag variable to the html line with the metar
     code_tag = get_tag(awc_html)
 
-    ## Sets the metars variable to the raw metar text
+    ## Sets the metars variable to the metar text between the code tag
     metars = code_tag.children
 
     for metar in metars:
