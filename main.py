@@ -14,7 +14,6 @@ ICAO = ["kstl", "kaln"]
 ## METAR txt file names list
 METAR_FILES = ["kstl.txt", "kaln.txt"]
 
-
 ## Web address to be scraped
 AWC_METAR_LINK = f"https://www.aviationweather.gov/metar/data?ids={ICAO}&format=raw&date=&hours=0"
 
@@ -24,7 +23,14 @@ AWC_PAGE = requests.get(AWC_METAR_LINK)
 ## Beautiful Soup scraping of the web-site data
 AWC_HTML = bs(AWC_PAGE.content, features="html.parser")
 
-# Setup constant variables for scraping, parssing, and writing text
+## Sets variable to the line that has the METAR text data
+CODE_TAG = AWC_HTML.code
+
+## Print debug
+for metar in CODE_TAG.children:
+    print(metar)
+
+'''
 AWC_STRING = str(AWC_HTML)
 AWC_FILE = None
 HOURLY_METAR = None
@@ -60,3 +66,4 @@ try:
         append.write("\n")
 except FileNotFoundError as fnfe:
     print(f"{fnfe}")
+'''
