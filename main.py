@@ -21,17 +21,21 @@ def request_website(website):
     return requests.get(website)
 
 
+def get_soup(html_text):
+    return bs(html_text.content, features="html.parser")
+
+
 index = 0
 while index < len(ICAO):
     ## Web address to be scraped
     AWC_METAR_SITE = f"https://www.aviationweather.gov/metar/data?ids={ICAO[index]}&format=raw&date=&hours=0"
 
     ## Requests web site data
-    #awc_page = requests.get(AWC_METAR_LINK)
     awc_page = request_website(AWC_METAR_SITE)
 
     ## Beautiful Soup scraping of the web-site data
-    awc_html = bs(awc_page.content, features="html.parser")
+    # awc_html = bs(awc_page.content, features="html.parser")
+    awc_html = get_soup(awc_page)
 
     ## Sets variable to the line that has the METAR text data
     code_tag = awc_html.code
