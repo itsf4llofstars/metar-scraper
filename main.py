@@ -3,7 +3,6 @@
 main.py file to scrape the weather data in the form of a raw
 METAR
 """
-from encodings import utf_8
 import requests
 from bs4 import BeautifulSoup as bs
 
@@ -18,20 +17,49 @@ PATH = "/home/pi/metars/"
 
 
 def request_website(website):
+    """_summary_
+
+    Args:
+        website (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     return requests.get(website)
 
 
 def get_soup(html_text):
+    """_summary_
+
+    Args:
+        html_text (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     return bs(html_text.content, features="html.parser")
 
 
 def get_tag(html_text):
+    """_summary_
+
+    Args:
+        html_text (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     return html_text.code
 
 
 def write_metar(metar_text, filename):
-    global PATH
-    with open(PATH + filename, "a") as append:
+    """_summary_
+
+    Args:
+        metar_text (_type_): _description_
+        filename (_type_): _description_
+    """
+    with open(PATH + filename, "a", encoding="utf-8") as append:
         append.write(metar_text + "\n")
 
 
