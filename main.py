@@ -16,22 +16,28 @@ METAR_FILES = ["kstl.txt", "kaln.txt"]
 ## Path to text metar text files
 PATH = "/home/pi/metars/"
 
+
+def request_website(website):
+    return requests.get(website)
+
+
 index = 0
 while index < len(ICAO):
     ## Web address to be scraped
-    AWC_METAR_LINK = f"https://www.aviationweather.gov/metar/data?ids={ICAO[index]}&format=raw&date=&hours=0"
+    AWC_METAR_SITE = f"https://www.aviationweather.gov/metar/data?ids={ICAO[index]}&format=raw&date=&hours=0"
 
     ## Requests web site data
-    awc_page = requests.get(AWC_METAR_LINK)
+    #awc_page = requests.get(AWC_METAR_LINK)
+    awc_page = request_website(AWC_METAR_SITE)
 
     ## Beautiful Soup scraping of the web-site data
-    awc_html = bs(AWC_PAGE.content, features="html.parser")
+    awc_html = bs(awc_page.content, features="html.parser")
 
     ## Sets variable to the line that has the METAR text data
-    code_tag = AWC_HTML.code
+    code_tag = awc_html.code
 
     ## Print debug
-    for metar in CODE_TAG.children:
+    for metar in code_tag.children:
         print(metar)
 
     index += 1
