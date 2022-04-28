@@ -7,6 +7,6 @@
 #: exit 0
 #: also change shebang to #!/bin/sh
 
-source "$HOME"/github/metar-scraper/.venv/bin/activate
-python3 "$HOME"/github/metar-scraper/cron_metar.py
+source "$HOME"/python/metar-scraper/venv/bin/activate
+python3 "$HOME"/python/metar-scraper/cron_metar.py
 deactivate
